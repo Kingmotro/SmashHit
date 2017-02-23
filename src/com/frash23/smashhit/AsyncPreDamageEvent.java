@@ -7,6 +7,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class AsyncPreDamageEvent extends Event {
+	
 	private static final HandlerList handlers = new HandlerList();
 
 	private boolean cancelled = false;
@@ -22,16 +23,39 @@ public class AsyncPreDamageEvent extends Event {
 		damage = dmg;
 	}
 
-	public void setDamage(double dmg) { damage = dmg; }
+	public void setDamage(double dmg) {
+		damage = dmg;
+	}
 
-	public Player getDamager() { return damager; }
-	public Damageable getEntity() { return entity; }
-	public double getDamage() { return damage; }
-	public EntityType getEntityType() { return entity.getType(); }
+	public Player getDamager() {
+		return damager;
+	}
 
-	public void setCancelled(boolean cancel) { cancelled = cancel; }
+	public Damageable getEntity() {
+		return entity;
+	}
 
-	public boolean isCancelled() { return cancelled; }
-	public HandlerList getHandlers() { return handlers; }
-	public static HandlerList getHandlerList() { return handlers; }
+	public double getDamage() {
+		return damage;
+	}
+
+	public EntityType getEntityType() {
+		return entity.getType();
+	}
+
+	public void setCancelled(boolean cancel) {
+		cancelled = cancel;
+	}
+
+	public boolean isCancelled() {
+		return cancelled;
+	}
+
+	public HandlerList getHandlers() {
+		return handlers;
+	}
+
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 }

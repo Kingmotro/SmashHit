@@ -1,6 +1,7 @@
 name: SmashHit-Unoriginal
-version: "1.1"
-author: "frash23, Speentie8081"
+version: "1.2"
+author: "frash23"
+authors: [Speentie8081, thekeenant, kukelekuuk00]
 main: "com.frash23.smashhit.SmashHit"
 depend: [ ProtocolLib ]
 softdepend: [ WorldGuard ]

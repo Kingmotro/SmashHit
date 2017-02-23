@@ -9,16 +9,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * SmashHit - Async hit preprocessor for the Bukkit API
- * Catches hit request packets asynchronously and processes
- * them in an async thread
+ * SmashHit - Async hit preprocessor for the Bukkit API Catches hit request
+ * packets asynchronously and processes them in an async thread
  *
  * @author frash23 / Jacob Pedersen
- * @version 0.5b
+ * @version 1.2
  *
- * Licensed under <a href="https://github.com/frash23/smashhit/blob/master/LICENSE">NBPL v2</a>
+ * Licensed under <a href="https://github.com/Speentie8081/SmashHit/blob/master/LICENSE">NBPLv2</a>
  */
 public class SmashHit extends JavaPlugin implements Listener {
+	
 	private boolean listening = false;
 	private boolean debugging = false;
 	private static SmashHit instance;
@@ -33,13 +33,14 @@ public class SmashHit extends JavaPlugin implements Listener {
 		instance = this;
 		pmgr = ProtocolLibrary.getProtocolManager();
 
-		getCommand("smashhit").setExecutor( new SmashHitCommand(this) );
+		getCommand("smashhit").setExecutor(new SmashHitCommand(this));
 		reload();
 	}
 
 	@Override
 	public void onDisable() {
-		if( getHitListener() != null) unregisterHitListener();
+		if (getHitListener() != null)
+			unregisterHitListener();
 
 		pmgr = null;
 		instance = null;
@@ -47,21 +48,18 @@ public class SmashHit extends JavaPlugin implements Listener {
 
 	void registerHitListener() {
 
-		if( getHitListener() == null) {
+		if (getHitListener() == null) {
 
-
-			/* We're doing this in a separate thread as we want instantiation in the same thread as the listener itself */
+			/*
+			 * We're doing this in a separate thread as we want instantiation in
+			 * the same thread as the listener itself
+			 */
 			new BukkitRunnable() {
-				@Override public void run() {
-					setHitListener( new SmashHitListener(
-							instance,
-							getConfig().getBoolean("enable-criticals"),
-							getConfig().getBoolean("old-criticals"),
-							getConfig().getInt("max-cps"),
-							getConfig().getDouble("max-reach")
-					) );
+				@Override
+				public void run() {
+					setHitListener(new SmashHitListener(instance, getConfig().getBoolean("enable-criticals"), getConfig().getBoolean("old-criticals"), getConfig().getInt("max-cps"), getConfig().getDouble("max-reach")));
 
-					setHitListenerHandler( pmgr.getAsynchronousManager().registerAsyncHandler( getHitListener() ) );
+					setHitListenerHandler(pmgr.getAsynchronousManager().registerAsyncHandler(getHitListener()));
 					getHitListenerHandler().start();
 				}
 			}.runTaskAsynchronously(this);
@@ -71,20 +69,22 @@ public class SmashHit extends JavaPlugin implements Listener {
 	}
 
 	void unregisterHitListener() {
-		if( getHitListener() != null) {
-			pmgr.getAsynchronousManager().unregisterAsyncHandler( getHitListenerHandler() );
+		if (getHitListener() != null) {
+			pmgr.getAsynchronousManager().unregisterAsyncHandler(getHitListenerHandler());
 			listening = false;
 			setHitListener(null);
 		}
 	}
 
 	void registerDebugListener() {
-		if(debugListener == null) debugListener = new SmashHitDebugListener(this);
+		if (debugListener == null)
+			debugListener = new SmashHitDebugListener(this);
 		getServer().getPluginManager().registerEvents(debugListener, this);
 		debugging = true;
 	}
+
 	void unregisterDebugListener() {
-		if(debugListener != null) {
+		if (debugListener != null) {
 			HandlerList.unregisterAll(debugListener);
 			debugging = false;
 			debugListener = null;
@@ -92,11 +92,13 @@ public class SmashHit extends JavaPlugin implements Listener {
 	}
 
 	private void registerWgListener() {
-		if(wgListener == null) wgListener = new WorldGuardListener();
+		if (wgListener == null)
+			wgListener = new WorldGuardListener();
 		getServer().getPluginManager().registerEvents(wgListener, this);
 	}
+
 	public void unregisterWgListener() {
-		if(wgListener != null) {
+		if (wgListener != null) {
 			HandlerList.unregisterAll(wgListener);
 			wgListener = null;
 		}
@@ -106,25 +108,42 @@ public class SmashHit extends JavaPlugin implements Listener {
 		saveDefaultConfig();
 		reloadConfig();
 
-		if( getHitListener() != null ) getHitListener().stop();
+		if (getHitListener() != null)
+			getHitListener().stop();
 		unregisterHitListener();
 		registerHitListener();
 
-
-		if(getConfig().getBoolean("use-bridge.worldguard")
-		&& getServer().getPluginManager().getPlugin("WorldGuard") != null ) {
+		if (getConfig().getBoolean("use-bridge.worldguard") && getServer().getPluginManager().getPlugin("WorldGuard") != null) {
 			registerWgListener();
 		}
 	}
 
 	/* These are synchronized as we're setting it from another thread */
-	private synchronized SmashHitListener getHitListener() { return hitListener; }
-	private synchronized void setHitListener(SmashHitListener hl) { hitListener = hl; }
-	private synchronized AsyncListenerHandler getHitListenerHandler() { return hitListenerHandler; }
-	private synchronized void setHitListenerHandler(AsyncListenerHandler hl) { hitListenerHandler = hl; }
+	private synchronized SmashHitListener getHitListener() {
+		return hitListener;
+	}
 
-	boolean isListening() { return listening; }
-	boolean isDebug() { return debugging; }
+	private synchronized void setHitListener(SmashHitListener hl) {
+		hitListener = hl;
+	}
 
-	static SmashHit getInstance() { return instance; }
+	private synchronized AsyncListenerHandler getHitListenerHandler() {
+		return hitListenerHandler;
+	}
+
+	private synchronized void setHitListenerHandler(AsyncListenerHandler hl) {
+		hitListenerHandler = hl;
+	}
+
+	boolean isListening() {
+		return listening;
+	}
+
+	boolean isDebug() {
+		return debugging;
+	}
+
+	static SmashHit getInstance() {
+		return instance;
+	}
 }

@@ -7,19 +7,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 class SmashHitDebugListener implements Listener {
+	
 	private SmashHit plugin;
 
 	SmashHitDebugListener(SmashHit pl) {
 		plugin = pl;
 	}
 
-
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent e) {
-		if( e.getDamager() instanceof Player && e.getEntity() instanceof Player ) {
-			plugin.getLogger().info( " --- SmashHit Debug --- " );
-			plugin.getLogger().info( "Attacker: " + ((Player) e.getDamager()).getName() + ", victim: " + ((Player) e.getEntity()).getName() );
-			plugin.getLogger().info( "Final damage: " + e.getFinalDamage() );
+		if (e.getDamager() instanceof Player && e.getEntity() instanceof Player) {
+			plugin.getLogger().info(" --- SmashHit Debug --- ");
+			plugin.getLogger().info("Attacker: " + ((Player) e.getDamager()).getName() + ", victim: " + ((Player) e.getEntity()).getName());
+			plugin.getLogger().info("Final damage: " + e.getDamage());
 		}
 	}
 }

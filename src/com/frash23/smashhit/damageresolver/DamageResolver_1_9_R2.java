@@ -1,10 +1,11 @@
 package com.frash23.smashhit.damageresolver;
 
-import net.minecraft.server.v1_9_R2.GenericAttributes;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+
+import net.minecraft.server.v1_9_R2.GenericAttributes;
 
 class DamageResolver_1_9_R2 implements DamageResolver {
 
@@ -21,7 +22,7 @@ class DamageResolver_1_9_R2 implements DamageResolver {
 		if(USE_CRITS
 		&& !( (Entity)damager ).isOnGround()
 		&& damager.getVelocity().getY() < 0
-		&& OLD_CRITS || !damager.isSprinting()
+		&& OLD_CRITS || damager.isSprinting()
 		) damage *= 1.5;
 
 		return damage;

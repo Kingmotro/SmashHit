@@ -22,7 +22,7 @@ class DamageResolver_1_11_R1 implements DamageResolver {
 		if(USE_CRITS
 		&& !( (Entity)damager ).isOnGround()
 		&& damager.getVelocity().getY() < 0
-		&& OLD_CRITS || !damager.isSprinting()
+		&& OLD_CRITS || damager.isSprinting()
 		) damage *= 1.5;
 
 		return damage;
