@@ -5,11 +5,10 @@
 	<classpathentry kind="lib" path="E:/Personal Storage/Spigot_BuildTools/dependencies/worldedit-bukkit-6.1.5.jar"/>
 	<classpathentry kind="lib" path="E:/Personal Storage/Spigot_BuildTools/dependencies/worldgaurd-legacy-6.1.3.jar"/>
 	<classpathentry kind="lib" path="E:/Personal Storage/Spigot_BuildTools/dependencies/protocollib-bukkit-3.7.0.jar"/>
-	<classpathentry kind="lib" path="E:/Personal Storage/Spigot_BuildTools/craftbukkit-1.6.4.jar"/>
+	<classpathentry kind="lib" path="E:/Personal Storage/Spigot_BuildTools/spigot-1.11.2.jar"/>
 	<classpathentry kind="lib" path="E:/Personal Storage/Spigot_BuildTools/spigot-1.7.10.jar"/>
 	<classpathentry kind="lib" path="E:/Personal Storage/Spigot_BuildTools/spigot-1.8.8.jar"/>
 	<classpathentry kind="lib" path="E:/Personal Storage/Spigot_BuildTools/spigot-1.9.4.jar"/>
 	<classpathentry kind="lib" path="E:/Personal Storage/Spigot_BuildTools/spigot-1.10.2.jar"/>
-	<classpathentry kind="lib" path="E:/Personal Storage/Spigot_BuildTools/spigot-1.11.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

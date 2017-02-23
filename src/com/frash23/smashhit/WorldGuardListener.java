@@ -1,5 +1,6 @@
 package com.frash23.smashhit;
 
+import com.frash23.smashhit.event.AsyncPreEntityDamageEvent;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import org.bukkit.Bukkit;
@@ -18,7 +19,7 @@ public class WorldGuardListener implements Listener {
 	}
 
 	@EventHandler
-	public void onAsyncPreDamageEvent(AsyncPreDamageEvent e) {
+	public void onAsyncPreDamageEvent(AsyncPreEntityDamageEvent e) {
 		Player damager = e.getDamager();
 		Damageable entity = e.getEntity();
 		World world = damager.getWorld();

@@ -4,9 +4,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 
+import com.frash23.smashhit.impl.DamageAttribute;
+
 public interface DamageResolver {
 
-	double getDamage(Player p, Damageable entity);
+	DamageAttribute getDamage(Player p, Damageable entity);
 
 	static DamageResolver getDamageResolver(boolean USE_CRITS, boolean OLD_CRITS) {
 		try {
@@ -23,8 +25,6 @@ public interface DamageResolver {
 				return new DamageResolver_1_8_R3(USE_CRITS, OLD_CRITS);
 			case "v1_7_R4":
 				return new DamageResolver_1_7_R4(USE_CRITS, OLD_CRITS);
-			case "v1_6_R3":
-				return new DamageResolver_1_6_R3(USE_CRITS, OLD_CRITS);
 			default:
 				return null;
 			}

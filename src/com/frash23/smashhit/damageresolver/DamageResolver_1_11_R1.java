@@ -5,6 +5,9 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import com.frash23.smashhit.impl.DamageAttribute;
+import com.frash23.smashhit.impl.DamageType;
+
 import net.minecraft.server.v1_11_R1.GenericAttributes;
 
 class DamageResolver_1_11_R1 implements DamageResolver {
@@ -17,15 +20,14 @@ class DamageResolver_1_11_R1 implements DamageResolver {
 	}
 
 	@Override
-	public double getDamage(Player damager, Damageable entity) {
-		double damage = ((CraftPlayer)damager).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
-		if(USE_CRITS
-		&& !( (Entity)damager ).isOnGround()
-		&& damager.getVelocity().getY() < 0
-		&& OLD_CRITS || damager.isSprinting()
-		) damage *= 1.5;
-
-		return damage;
+	public DamageAttribute getDamage(Player damager, Damageable entity) {
+		double damage = ((CraftPlayer) damager).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
+		int damageType = DamageType.NORMAL;
+		if (USE_CRITS && !((Entity) damager).isOnGround() && damager.getVelocity().getY() < 0 && OLD_CRITS || damager.isSprinting()) {
+			damageType = DamageType.CRITICAL;
+			damage *= 1.5;
+		}
+		return new DamageAttribute(damage, damageType);
 	}
 
 }

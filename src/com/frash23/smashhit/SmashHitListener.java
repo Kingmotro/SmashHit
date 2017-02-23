@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Damageable;
@@ -30,6 +30,10 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers.EntityUseAction;
 import com.frash23.smashhit.damageresolver.DamageResolver;
+import com.frash23.smashhit.event.AsyncEntityDamageEvent;
+import com.frash23.smashhit.event.AsyncPreEntityDamageEvent;
+import com.frash23.smashhit.impl.DamageAttribute;
+import com.frash23.smashhit.impl.DamageType;
 
 class SmashHitListener extends PacketAdapter {
 
@@ -40,7 +44,7 @@ class SmashHitListener extends PacketAdapter {
 	private DamageResolver damageResolver;
 
 	private Map<Player, Integer> cps = new HashMap<>();
-	private Queue<EntityDamageByEntityEvent> hitQueue = new ConcurrentLinkedQueue<>();
+	private Queue<AsyncEntityDamageEvent> hitQueue = new ConcurrentLinkedQueue<>();
 
 	private static byte MAX_CPS;
 	private static float MAX_DISTANCE;
@@ -60,11 +64,17 @@ class SmashHitListener extends PacketAdapter {
 	}
 
 	private BukkitTask hitQueueProcessor = new BukkitRunnable() {
+		@SuppressWarnings("deprecation")
 		@Override
 		public void run() {
 			while (hitQueue.size() > 0) {
-				EntityDamageByEntityEvent e = hitQueue.remove();
-				((Damageable) e.getEntity()).damage(e.getDamage(), e.getDamager());
+				AsyncEntityDamageEvent e = hitQueue.remove();
+				Entity damagee = e.getDamageEvent().getEntity();
+				Entity damager = e.getDamageEvent().getDamager();
+				((Damageable) damagee).damage(e.getDamageEvent().getDamage(), damager);
+				if (e.getDamageAttrib().getDamageType() == DamageType.CRITICAL) {
+					damager.getWorld().playEffect(damager.getLocation(), Effect.CRIT, 1);
+				}
 			}
 		}
 	}.runTaskTimer(SmashHit.getInstance(), 1, 1);
@@ -76,6 +86,7 @@ class SmashHitListener extends PacketAdapter {
 		}
 	}.runTaskTimer(SmashHit.getInstance(), 20, 20);
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onPacketReceiving(PacketEvent e) {
 
@@ -124,7 +135,7 @@ class SmashHitListener extends PacketAdapter {
 				Team team = attacker.getScoreboard().getTeam(attacker.getName());
 
 				if (team != null) {
-					if (!team.allowFriendlyFire() && team.hasPlayer(Bukkit.getOfflinePlayer(playerTarget.getName()))) {
+					if (!team.allowFriendlyFire() && team.hasEntry(playerTarget.getName())) {
 						return;
 					}
 				}
@@ -142,9 +153,9 @@ class SmashHitListener extends PacketAdapter {
 		damageAnimation.getBytes().write(0, (byte) 2);
 
 		try {
-			double damage = damageResolver.getDamage(attacker, target);
-
-			AsyncPreDamageEvent damageEvent = new AsyncPreDamageEvent(attacker, target, damage);
+			DamageAttribute damageAttrib = damageResolver.getDamage(attacker, target);
+			double damage = damageAttrib.getDamage();
+			AsyncPreEntityDamageEvent damageEvent = new AsyncPreEntityDamageEvent(attacker, target, damage);
 			getPluginManager().callEvent(damageEvent);
 
 			if (!damageEvent.isCancelled()) {
@@ -160,10 +171,12 @@ class SmashHitListener extends PacketAdapter {
 				 * increment even if the limit is reached. This should weed out
 				 * some hackers nicely
 				 */
-				if (attackerCps <= MAX_CPS)
-					hitQueue.add(new EntityDamageByEntityEvent(attacker, target, DamageCause.ENTITY_ATTACK, damageEvent.getDamage()));
+				if (attackerCps <= MAX_CPS) {
+					EntityDamageByEntityEvent entityDamageEvent = new EntityDamageByEntityEvent(attacker, target, DamageCause.ENTITY_ATTACK, damageEvent.getDamage());
+					AsyncEntityDamageEvent asyncEntityDamageEvent = new AsyncEntityDamageEvent(damageAttrib, entityDamageEvent);
+					hitQueue.add(asyncEntityDamageEvent);
+				}
 			}
-
 		} catch (InvocationTargetException err) {
 			throw new RuntimeException("Error while sending damage packet: ", err);
 		}
@@ -174,4 +187,5 @@ class SmashHitListener extends PacketAdapter {
 		hitQueueProcessor.cancel();
 		damageResolver = null;
 	}
+
 }
