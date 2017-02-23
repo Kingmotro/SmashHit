@@ -3,6 +3,18 @@ SmashHit (Unoriginal, Recode)
 
 Originally developed by frash23, but this is a personally maintained copy.
 
+Changes and additions:
+* Added 1.11 support, as well as 1.6 support
+* Resolved 1.7 incompatibility issues
+* Resolve a bug causing spriting to be less effective
+* Completely change most of the plugin messages
+* Add /smashhit debug into the help dialog
+* Resolve a bug causing two damage events to be sent
+* ... among other changes
+
+SmashHit
+===
+
 Free async hit pre-processor for bukkit
 
 What's wrong with the default hit processor?
