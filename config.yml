@@ -12,7 +12,7 @@ max-cps: 12
 # How many blocks of reach can players have?
 max-reach: 3.85
 
-# Bridge to other PvP proteciton plugins
-# WorldGuard bridge is currently not stable.
+# Bridge to other PvP protection plugins
+# WorldGuard bridge is currently experimental.
 use-bridge:
-  worldguard: false
+  worldguard: true
