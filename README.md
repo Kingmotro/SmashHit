@@ -6,7 +6,7 @@ Originally developed by frash23, but this is a personally maintained copy.
 SmashHit is a asynchronous hit processing agent that replaces the build-in one hard-coded into Bukkit, this allows users of this plugin to control the max clicks per second and attack range for the players. On a side note, this plugin is very experimental even in this stage, and may not work as intended.
 
 Changes and additions:
-* Added 1.11 support, as well as 1.6 support
+* Added complete 1.11 support
 * Resolved 1.7 incompatibility issues
 * Resolve a bug causing spriting to be less effective
 * Completely change most of the plugin messages
