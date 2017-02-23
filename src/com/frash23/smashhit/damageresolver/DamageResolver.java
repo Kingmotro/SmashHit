@@ -24,7 +24,7 @@ public interface DamageResolver {
 			case "v1_7_R4":
 				return new DamageResolver_1_7_R4(USE_CRITS, OLD_CRITS);
 			case "v1_6_R3":
-				return new DamageResolver_1_7_R4(USE_CRITS, OLD_CRITS);
+				return new DamageResolver_1_6_R3(USE_CRITS, OLD_CRITS);
 			default:
 				return null;
 			}
